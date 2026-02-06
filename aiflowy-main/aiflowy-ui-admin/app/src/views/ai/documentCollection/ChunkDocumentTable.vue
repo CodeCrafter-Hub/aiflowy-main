@@ -1,0 +1,159 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+
+import { $t } from '@aiflowy/locales';
+
+import { Delete, MoreFilled } from '@element-plus/icons-vue';
+import {
+  ElButton,
+  ElDialog,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElMessage,
+  ElMessageBox,
+  ElTable,
+  ElTableColumn,
+} from 'element-plus';
+
+import { api } from '#/api/request';
+import PageData from '#/components/page/PageData.vue';
+
+const props = defineProps({
+  documentId: {
+    type: String,
+    default: '',
+  },
+});
+const dialogVisible = ref(false);
+const pageDataRef = ref();
+const handleEdit = (row: any) => {
+  form.value = { id: row.id, content: row.content };
+  openDialog();
+};
+const handleDelete = (row: any) => {
+  ElMessageBox.confirm($t('message.deleteAlert'), $t('message.noticeTitle'), {
+    confirmButtonText: $t('message.ok'),
+    cancelButtonText: $t('message.cancel'),
+    type: 'warning',
+  })
+    .then(() => {
+      btnLoading.value = true;
+      api
+        .post('/api/v1/documentChunk/removeChunk', { id: row.id })
+        .then((res: any) => {
+          btnLoading.value = false;
+          if (res.errorCode !== 0) {
+            ElMessage.error(res.message);
+            return;
+          }
+          ElMessage.success($t('message.deleteOkMessage'));
+          pageDataRef.value.setQuery(queryParams);
+        });
+    })
+    .catch(() => {});
+};
+const openDialog = () => {
+  dialogVisible.value = true;
+};
+const closeDialog = () => {
+  dialogVisible.value = false;
+};
+const queryParams = ref({
+  documentId: props.documentId,
+  sortKey: 'sorting',
+  sortType: 'asc',
+});
+const save = () => {
+  btnLoading.value = true;
+  api.post('/api/v1/documentChunk/update', form.value).then((res: any) => {
+    btnLoading.value = false;
+    if (res.errorCode !== 0) {
+      ElMessage.error(res.message);
+      return;
+    }
+    ElMessage.success($t('message.updateOkMessage'));
+    pageDataRef.value.setQuery(queryParams);
+    closeDialog();
+  });
+};
+const btnLoading = ref(false);
+const basicFormRef = ref();
+const form = ref({
+  id: '',
+  content: '',
+});
+</script>
+
+<template>
+  <div>
+    <PageData
+      page-url="/api/v1/documentChunk/page"
+      ref="pageDataRef"
+      :page-size="10"
+      :extra-query-params="queryParams"
+    >
+      <template #default="{ pageList }">
+        <ElTable :data="pageList" style="width: 100%" size="large">
+          <ElTableColumn
+            prop="content"
+            :label="$t('documentCollection.content')"
+            min-width="240"
+          />
+          <ElTableColumn :label="$t('common.handle')" width="100" align="right">
+            <template #default="{ row }">
+              <div class="flex items-center gap-3">
+                <ElButton link type="primary" @click="handleEdit(row)">
+                  {{ $t('button.edit') }}
+                </ElButton>
+
+                <ElDropdown>
+                  <ElButton link :icon="MoreFilled" />
+
+                  <template #dropdown>
+                    <ElDropdownMenu>
+                      <ElDropdownItem @click="handleDelete(row)">
+                        <ElButton link type="danger" :icon="Delete">
+                          {{ $t('button.delete') }}
+                        </ElButton>
+                      </ElDropdownItem>
+                    </ElDropdownMenu>
+                  </template>
+                </ElDropdown>
+              </div>
+            </template>
+          </ElTableColumn>
+        </ElTable>
+      </template>
+    </PageData>
+    <ElDialog v-model="dialogVisible" :title="$t('button.edit')" width="50%">
+      <ElForm
+        ref="basicFormRef"
+        style="width: 100%; margin-top: 20px"
+        :model="form"
+      >
+        <ElFormItem>
+          <ElInput v-model="form.content" :rows="20" type="textarea" />
+        </ElFormItem>
+      </ElForm>
+      <template #footer>
+        <ElButton @click="closeDialog">
+          {{ $t('button.cancel') }}
+        </ElButton>
+        <ElButton
+          type="primary"
+          @click="save"
+          :loading="btnLoading"
+          :disabled="btnLoading"
+        >
+          {{ $t('button.save') }}
+        </ElButton>
+      </template>
+    </ElDialog>
+  </div>
+</template>
+
+<style scoped></style>

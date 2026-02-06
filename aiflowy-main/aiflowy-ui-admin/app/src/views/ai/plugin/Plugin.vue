@@ -1,0 +1,308 @@
+<script setup lang="ts">
+import type { ActionButton } from '#/components/page/CardList.vue';
+
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { $t } from '@aiflowy/locales';
+
+import { Delete, Edit, Plus } from '@element-plus/icons-vue';
+import {
+  ElButton,
+  ElDialog,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElMessage,
+  ElMessageBox,
+} from 'element-plus';
+
+import { api } from '#/api/request';
+import defaultPluginIcon from '#/assets/ai/plugin/defaultPluginIcon.png';
+import HeaderSearch from '#/components/headerSearch/HeaderSearch.vue';
+import CategorizeIcon from '#/components/icons/CategorizeIcon.vue';
+import PluginToolIcon from '#/components/icons/PluginToolIcon.vue';
+import CardPage from '#/components/page/CardList.vue';
+import PageData from '#/components/page/PageData.vue';
+import PageSide from '#/components/page/PageSide.vue';
+import AddPluginModal from '#/views/ai/plugin/AddPluginModal.vue';
+import CategoryPluginModal from '#/views/ai/plugin/CategoryPluginModal.vue';
+
+const router = useRouter();
+// 操作按钮配置
+const actions: ActionButton[] = [
+  {
+    icon: Edit,
+    text: $t('button.edit'),
+    className: '',
+    permission: '/api/v1/plugin/save',
+    onClick(item) {
+      aiPluginModalRef.value.openDialog(item);
+    },
+  },
+  {
+    icon: PluginToolIcon,
+    text: $t('plugin.button.tools'),
+    className: '',
+    permission: '/api/v1/plugin/save',
+    onClick(item) {
+      router.push({
+        path: '/ai/plugin/tools',
+        query: {
+          id: item.id,
+          pageKey: '/ai/plugin',
+        },
+      });
+    },
+  },
+  {
+    icon: CategorizeIcon,
+    text: $t('plugin.button.categorize'),
+    className: '',
+    permission: '/api/v1/plugin/save',
+    onClick(item) {
+      categoryCategoryModal.value.openDialog(item);
+    },
+  },
+  {
+    icon: Delete,
+    text: $t('button.delete'),
+    className: 'item-danger',
+    permission: '/api/v1/plugin/remove',
+    onClick(item) {
+      handleDelete(item);
+    },
+  },
+];
+const categoryList = ref([]);
+const controlBtns = [
+  {
+    icon: Edit,
+    label: $t('button.edit'),
+    onClick(row) {
+      formData.value.name = row.name;
+      formData.value.id = row.id;
+      isEdit.value = true;
+      dialogVisible.value = true;
+    },
+  },
+  {
+    type: 'danger',
+    icon: Delete,
+    label: $t('button.delete'),
+    onClick(row) {
+      handleDeleteCategory(row);
+    },
+  },
+];
+const footerButton = {
+  icon: Plus,
+  label: $t('button.add'),
+  onClick() {
+    dialogVisible.value = true;
+    isEdit.value = false;
+  },
+};
+const getPluginCategoryList = async () => {
+  return api.get('/api/v1/pluginCategory/list').then((res) => {
+    if (res.errorCode === 0) {
+      categoryList.value = [
+        { id: '0', name: $t('common.allCategories') },
+        ...res.data,
+      ];
+    }
+  });
+};
+onMounted(() => {
+  getPluginCategoryList();
+});
+const handleDelete = (item) => {
+  ElMessageBox.confirm($t('message.deleteAlert'), $t('message.noticeTitle'), {
+    confirmButtonText: $t('message.ok'),
+    cancelButtonText: $t('message.cancel'),
+    type: 'warning',
+  })
+    .then(() => {
+      api.post('/api/v1/plugin/plugin/remove', { id: item.id }).then((res) => {
+        if (res.errorCode === 0) {
+          ElMessage.success($t('message.deleteOkMessage'));
+          pageDataRef.value.setQuery({});
+        }
+      });
+    })
+    .catch(() => {});
+};
+
+const pageDataRef = ref();
+const aiPluginModalRef = ref();
+const categoryCategoryModal = ref();
+const headerButtons = [
+  {
+    key: 'add',
+    text: $t('plugin.button.addPlugin'),
+    icon: Plus,
+    type: 'primary',
+    data: { action: 'add' },
+  },
+];
+const pluginCategoryId = ref('0');
+const dialogVisible = ref(false); // 弹窗显隐
+const isEdit = ref(false); // 是否为编辑模式
+const formData = ref({ name: '', id: '' });
+
+const handleSubmit = () => {
+  // 触发对应事件，传递表单数据
+  if (isEdit.value) {
+    handleEditCategory(formData.value);
+  } else {
+    handleAddCategory(formData.value);
+  }
+  // 提交后关闭弹窗
+  dialogVisible.value = false;
+};
+const handleButtonClick = (event, _item) => {
+  switch (event.key) {
+    case 'add': {
+      aiPluginModalRef.value.openDialog({});
+      break;
+    }
+  }
+};
+const handleSearch = (params) => {
+  pageDataRef.value.setQuery({ title: params, isQueryOr: true });
+};
+const handleEditCategory = (params) => {
+  api
+    .post('/api/v1/pluginCategory/update', {
+      id: params.id,
+      name: params.name,
+    })
+    .then((res) => {
+      if (res.errorCode === 0) {
+        getPluginCategoryList();
+        ElMessage.success($t('message.updateOkMessage'));
+      }
+    });
+};
+const handleAddCategory = (params) => {
+  api.post('/api/v1/pluginCategory/save', { name: params.name }).then((res) => {
+    if (res.errorCode === 0) {
+      getPluginCategoryList();
+      ElMessage.success($t('message.saveOkMessage'));
+    }
+  });
+};
+const handleDeleteCategory = (params) => {
+  api
+    .get(`/api/v1/pluginCategory/doRemoveCategory?id=${params.id}`)
+    .then((res) => {
+      if (res.errorCode === 0) {
+        getPluginCategoryList();
+        ElMessage.success($t('message.deleteOkMessage'));
+      }
+    });
+};
+const handleClickCategory = (item) => {
+  pageDataRef.value.setQuery({ category: item.id });
+};
+</script>
+
+<template>
+  <div class="knowledge-container">
+    <div class="knowledge-header">
+      <HeaderSearch
+        :buttons="headerButtons"
+        :search-placeholder="$t('plugin.searchUsers')"
+        @search="handleSearch"
+        @button-click="handleButtonClick"
+      />
+    </div>
+    <div class="plugin-content-container">
+      <div class="category-panel-container">
+        <PageSide
+          label-key="name"
+          value-key="id"
+          :menus="categoryList"
+          :control-btns="controlBtns"
+          :footer-button="footerButton"
+          default-selected="0"
+          @change="handleClickCategory"
+        />
+      </div>
+
+      <div class="plugin-content-data-container h-full overflow-auto">
+        <PageData
+          ref="pageDataRef"
+          page-url="/api/v1/plugin/pageByCategory"
+          :page-size="12"
+          :page-sizes="[12, 24, 36, 48]"
+          :extra-query-params="{ category: pluginCategoryId }"
+        >
+          <template #default="{ pageList }">
+            <CardPage
+              title-key="title"
+              avatar-key="icon"
+              description-key="description"
+              :data="pageList"
+              :actions="actions"
+              :default-icon="defaultPluginIcon"
+            />
+          </template>
+        </PageData>
+      </div>
+    </div>
+    <AddPluginModal ref="aiPluginModalRef" @reload="handleSearch" />
+    <CategoryPluginModal ref="categoryCategoryModal" @reload="handleSearch" />
+    <ElDialog
+      :title="isEdit ? `${$t('button.edit')}` : `${$t('button.add')}`"
+      v-model="dialogVisible"
+      width="500px"
+      :close-on-click-modal="false"
+    >
+      <ElForm :model="formData" status-icon>
+        <ElFormItem>
+          <ElInput v-model.trim="formData.name" />
+        </ElFormItem>
+      </ElForm>
+
+      <template #footer>
+        <ElButton @click="dialogVisible = false">
+          {{ $t('button.cancel') }}
+        </ElButton>
+        <ElButton type="primary" @click="handleSubmit">
+          {{ $t('button.confirm') }}
+        </ElButton>
+      </template>
+    </ElDialog>
+  </div>
+</template>
+
+<style scoped>
+.knowledge-container {
+  width: 100%;
+  padding: 24px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 30px;
+  color: #303133;
+  text-align: center;
+}
+
+.plugin-content-container {
+  display: flex;
+  gap: 24px;
+  height: calc(100vh - 161px);
+  padding-top: 24px;
+}
+
+.plugin-content-data-container {
+  /* padding: 20px; */
+
+  /* background-color: var(--el-bg-color); */
+  width: 100%;
+  border-top-right-radius: var(--el-border-radius-base);
+  border-bottom-right-radius: var(--el-border-radius-base);
+}
+</style>

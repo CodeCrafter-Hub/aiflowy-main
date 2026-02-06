@@ -1,0 +1,91 @@
+<script setup lang="ts">
+import type { Ref } from 'vue';
+
+import { nextTick, ref } from 'vue';
+
+import { $t } from '@aiflowy/locales';
+
+import { ElButton, ElDialog, ElForm, ElFormItem, ElInput } from 'element-plus';
+
+interface BasicFormItem {
+  key: string;
+  description: string;
+}
+
+const emit = defineEmits(['success']);
+const dialogVisible = ref(false);
+
+const generateDefaultFormItems = (
+  data: BasicFormItem[] = [],
+): BasicFormItem[] => {
+  return Array.from({ length: 5 }, (_, i) => ({
+    key: (i + 1).toString(),
+    description: data[i]?.description || '',
+  }));
+};
+
+const openDialog = (data: BasicFormItem[]) => {
+  nextTick(() => {
+    basicFormRef.value?.resetFields();
+  });
+  basicForm.value = generateDefaultFormItems(data);
+  dialogVisible.value = true;
+};
+
+const basicForm: Ref<BasicFormItem[]> = ref(generateDefaultFormItems());
+const basicFormRef = ref();
+
+defineExpose({
+  openDialog(data: BasicFormItem[]) {
+    openDialog(data);
+  },
+});
+
+const handleConfirm = () => {
+  basicFormRef.value?.validate((valid: boolean) => {
+    if (valid) {
+      emit('success', basicForm.value);
+      dialogVisible.value = false;
+    }
+  });
+};
+</script>
+
+<template>
+  <ElDialog
+    v-model="dialogVisible"
+    :title="$t('button.add')"
+    width="700"
+    align-center
+  >
+    <ElForm
+      ref="basicFormRef"
+      style="width: 100%; margin-top: 20px"
+      :model="basicForm"
+      label-width="auto"
+    >
+      <template v-for="(item, index) in basicForm" :key="item.key">
+        <ElFormItem
+          :label="`${$t('bot.problemPresupposition')}${item.key}`"
+          :prop="`${index}.description`"
+          label-position="right"
+        >
+          <ElInput v-model="item.description" />
+        </ElFormItem>
+      </template>
+    </ElForm>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <ElButton @click="dialogVisible = false">
+          {{ $t('button.cancel') }}
+        </ElButton>
+        <ElButton type="primary" @click="handleConfirm">
+          {{ $t('button.confirm') }}
+        </ElButton>
+      </div>
+    </template>
+  </ElDialog>
+</template>
+
+<style scoped></style>

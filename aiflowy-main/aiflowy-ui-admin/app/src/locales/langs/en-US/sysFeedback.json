@@ -1,0 +1,20 @@
+{
+  "feedbackType": "FeedbackType",
+  "processingStatus": "ProcessingStatus",
+  "category": "Category",
+  "description": "Description",
+  "contactInformation": "ContactInformation",
+  "submittedAt": "SubmittedAt",
+  "functionalFailure": "FunctionalFailure",
+  "optimizationSuggestions": "OptimizationSuggestions",
+  "accountIssue": "AccountIssue",
+  "other": "Other",
+  "notViewed": "NotViewed",
+  "viewed": "Viewed",
+  "processed": "Processed",
+  "closed/Invalid": "Closed/Invalid",
+  "markedSuccessfully": "Marked Successfully!",
+  "basicInformation": "BasicInformation",
+  "feedbackContent": "FeedbackContent",
+  "attachments": "Attachments"
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>tech.aiflowy</groupId>
+        <artifactId>aiflowy</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>aiflowy-commons</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>aiflowy-common-all</module>
+        <module>aiflowy-common-web</module>
+        <module>aiflowy-common-captcha</module>
+        <module>aiflowy-common-base</module>
+        <module>aiflowy-common-file-storage</module>
+        <module>aiflowy-common-ai</module>
+        <module>aiflowy-common-options</module>
+        <module>aiflowy-common-cache</module>
+        <module>aiflowy-common-satoken</module>
+        <module>aiflowy-common-audio</module>
+        <module>aiflowy-common-chat-protocol</module>
+    </modules>
+
+</project>

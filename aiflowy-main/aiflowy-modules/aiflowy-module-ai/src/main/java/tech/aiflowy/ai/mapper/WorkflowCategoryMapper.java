@@ -1,0 +1,14 @@
+package tech.aiflowy.ai.mapper;
+
+import com.mybatisflex.core.BaseMapper;
+import tech.aiflowy.ai.entity.WorkflowCategory;
+
+/**
+ *  映射层。
+ *
+ * @author ArkLight
+ * @since 2025-12-11
+ */
+public interface WorkflowCategoryMapper extends BaseMapper<WorkflowCategory> {
+
+}

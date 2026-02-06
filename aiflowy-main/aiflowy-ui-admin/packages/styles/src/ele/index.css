@@ -1,0 +1,96 @@
+.el-card {
+  --el-card-border-radius: var(--radius) !important;
+}
+
+.form-valid-error {
+  /** select 选择器的样式 */
+  .el-select .el-select__wrapper {
+    box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  }
+
+  /** input 选择器的样式 */
+  .el-input .el-input__wrapper {
+    box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  }
+
+  /** radio和checkbox 选择器的样式 */
+  .el-radio .el-radio__inner,
+  .el-checkbox .el-checkbox__inner {
+    border: 1px solid var(--el-color-danger);
+  }
+
+  .el-checkbox-button .el-checkbox-button__inner,
+  .el-radio-button .el-radio-button__inner {
+    border: 1px solid var(--el-color-danger);
+  }
+
+  .el-checkbox-button:first-child .el-checkbox-button__inner,
+  .el-radio-button:first-child .el-radio-button__inner {
+    border-left: 1px solid var(--el-color-danger);
+  }
+
+  .el-checkbox-button:not(:first-child) .el-checkbox-button__inner,
+  .el-radio-button:not(:first-child) .el-radio-button__inner {
+    border-left: none;
+  }
+
+  .el-textarea .el-textarea__inner {
+    border: 1px solid var(--el-color-danger);
+  }
+}
+
+html .el-loading-mask {
+  z-index: 1000;
+}
+
+.el-table__header-wrapper {
+  border-radius: 8px;
+}
+
+.el-table thead {
+  /* --el-table-header-text-color: #323233; */
+  color: var(--table-header-text-color) !important;
+}
+
+.el-table th.el-table__cell {
+  /* --el-table-header-bg-color: #f7f9fd; */
+  background-color: var(--table-header-bg-color) !important;
+}
+
+.el-table td.el-table__cell,
+.el-table th.el-table__cell.is-leaf {
+  --el-table-border: none;
+}
+
+.el-table td.el-table__cell {
+  box-shadow: inset 0px -1px 0px 0px var(--table-cell-shadow-color);
+}
+
+.el-table--border .el-table__inner-wrapper:after,
+.el-table--border:after,
+.el-table--border:before,
+.el-table__inner-wrapper:before {
+  --el-table-border-color: transparent;
+}
+
+.el-table__border-bottom-patch,
+.el-table__border-left-patch {
+  --el-table-border-color: transparent;
+}
+
+.el-dialog__body {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.el-button {
+  --el-color-primary: hsl(var(--primary))
+}
+
+.el-tooltip {
+  max-width: 50vw;
+}
+
+.el-table .el-button.is-link>span {
+  font-weight: 400;
+}

@@ -1,0 +1,15 @@
+{
+  "providerName": "ProviderName",
+  "provider": "Provider",
+  "icon": "Icon",
+  "apiKey": "ApiKey",
+  "endpoint": "APIAddress",
+  "embedPath": "EmbedPath",
+  "chatPath": "ChatPath",
+  "rerankPath": "RerankPath",
+  "embeddingModel": "EmbeddingModel",
+  "chatModel": "ChatModel",
+  "rerankModel": "RerankModel",
+  "model": "Model",
+  "apiType": "ApiType"
+}

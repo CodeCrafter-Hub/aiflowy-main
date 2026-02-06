@@ -1,0 +1,28 @@
+{
+  "system": {
+    "title": "System",
+    "sysAccount": "Account",
+    "sysRole": "Role",
+    "sysMenu": "Menu",
+    "sysDept": "Department",
+    "sysPosition": "Position",
+    "sysDict": "Dictionary",
+    "sysJob": "Job",
+    "sysLog": "Log"
+  },
+  "ai": {
+    "bots": "ChatAssistant",
+    "title": "AI",
+    "resources": "Resources",
+    "datacenter": "Datacenter",
+    "workflow": "Workflow",
+    "plugin": "Plugin",
+    "llm": "LLM",
+    "knowledge": "Knowledge"
+  },
+  "settings": {
+    "title": "SettingsConfiguration",
+    "settingsConfig": "SettingsConfig",
+    "apiKey": "API Key"
+  }
+}

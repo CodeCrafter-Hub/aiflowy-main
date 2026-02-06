@@ -1,0 +1,67 @@
+package tech.aiflowy.usercenter.controller.ai;
+
+import cn.dev33.satoken.annotation.SaIgnore;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import tech.aiflowy.ai.entity.BotConversation;
+import tech.aiflowy.ai.service.BotConversationService;
+import tech.aiflowy.ai.service.BotMessageService;
+import tech.aiflowy.common.domain.Result;
+import tech.aiflowy.common.entity.LoginAccount;
+import tech.aiflowy.common.satoken.util.SaTokenUtil;
+import tech.aiflowy.common.web.controller.BaseCurdController;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
+
+@RestController
+@RequestMapping("/userCenter/botConversation")
+@SaIgnore
+public class UcBotConversationController extends BaseCurdController<BotConversationService, BotConversation> {
+
+    @Resource
+    private BotConversationService conversationMessageService;
+    @Resource
+    private BotMessageService botMessageService;
+
+    public UcBotConversationController(BotConversationService service) {
+        super(service);
+    }
+
+    /**
+     * 删除指定会话
+     */
+    @GetMapping("/deleteConversation")
+    public Result<Void> deleteConversation(String botId, String conversationId) {
+        LoginAccount account = SaTokenUtil.getLoginAccount();
+        conversationMessageService.deleteConversation(botId, conversationId, account.getId());
+        return Result.ok();
+    }
+
+    /**
+     * 更新会话标题
+     */
+    @GetMapping("/updateConversation")
+    public Result<Void> updateConversation(String botId, String conversationId, String title) {
+        LoginAccount account = SaTokenUtil.getLoginAccount();
+        conversationMessageService.updateConversation(botId, conversationId, title, account.getId());
+        return Result.ok();
+    }
+
+    @Override
+    public Result<List<BotConversation>> list(BotConversation entity, Boolean asTree, String sortKey, String sortType) {
+        entity.setAccountId(SaTokenUtil.getLoginAccount().getId());
+        sortKey = "created";
+        sortType = "desc";
+        return super.list(entity, asTree, sortKey, sortType);
+    }
+
+    @Override
+    protected Result<?> onSaveOrUpdateBefore(BotConversation entity, boolean isSave) {
+        entity.setAccountId(SaTokenUtil.getLoginAccount().getId());
+        entity.setCreated(new Date());
+        return super.onSaveOrUpdateBefore(entity, isSave);
+    }
+}

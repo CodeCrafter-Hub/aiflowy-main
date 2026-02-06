@@ -1,0 +1,90 @@
+import { $t } from '#/locales';
+
+import nodeNames from './nodeNames';
+
+export default {
+  [nodeNames.downloadNode]: {
+    title: $t('aiWorkflow.resourceSync'),
+    group: 'base',
+    description: $t('aiWorkflow.descriptions.resourceSync'),
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 12H16L12 16L8 12H11V8H13V12ZM15 4H5V20H19V8H15V4ZM3 2.9918C3 2.44405 3.44749 2 3.9985 2H16L20.9997 7L21 20.9925C21 21.5489 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5447 3 21.0082V2.9918Z"></path></svg>',
+    sortNo: 811,
+    parametersAddEnable: false,
+    outputDefsAddEnable: false,
+    parameters: [
+      {
+        name: 'originUrl',
+        nameDisabled: true,
+        title: $t('aiWorkflow.originUrl'),
+        dataType: 'String',
+        required: true,
+        description: $t('aiWorkflow.descriptions.originUrl'),
+      },
+    ],
+    outputDefs: [
+      {
+        name: 'resourceUrl',
+        title: $t('aiWorkflow.savedUrl'),
+        dataType: 'String',
+        dataTypeDisabled: true,
+        required: true,
+        parametersAddEnable: false,
+        description: $t('aiWorkflow.savedUrl'),
+        deleteDisabled: true,
+      },
+    ],
+    forms: [
+      // 节点表单
+      {
+        // 'input' | 'textarea' | 'select' | 'slider' | 'heading' | 'chosen'
+        type: 'heading',
+        label: $t('aiWorkflow.saveOptions'),
+      },
+      {
+        type: 'select',
+        label: $t('aiResource.resourceType'),
+        description: $t('aiWorkflow.descriptions.resourceType'),
+        name: 'resourceType', // 属性名称
+        defaultValue: '99',
+        options: [
+          {
+            label: $t('aiWorkflow.image'),
+            value: '0',
+          },
+          {
+            label: $t('aiWorkflow.video'),
+            value: '1',
+          },
+          {
+            label: $t('aiWorkflow.audio'),
+            value: '2',
+          },
+          {
+            label: $t('aiWorkflow.document'),
+            value: '3',
+          },
+          {
+            label: $t('aiWorkflow.other'),
+            value: '99',
+          },
+        ],
+      },
+      // {
+      //     // 用法可参考插件节点的代码
+      //     type: 'chosen',
+      //     label: '插件选择',
+      //     chosen: {
+      //         // 节点自定义属性
+      //         labelDataKey: 'pluginName',
+      //         valueDataKey: 'pluginId',
+      //         // updateNodeData 可动态更新节点属性
+      //         // value 为选中的 value
+      //         // label 为选中的 label
+      //         onChosen: ((updateNodeData: (data: Record<string, any>) => void, value?: string, label?: string, event?: Event) => {
+      //             console.warn('No onChosen handler provided for plugin-node');
+      //         })
+      //     }
+      // }
+    ],
+  },
+};

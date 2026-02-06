@@ -1,0 +1,80 @@
+{
+  "filed":
+    {
+      "id": "Id",
+      "deptId": "DeptId",
+      "tenantId": "TenantId",
+      "title": "Title",
+      "brand": "Brand",
+      "icon": "Icon",
+      "description": "Description",
+      "supportChat": "SupportChat",
+      "supportFunctionCalling": "SupportFunctionCalling",
+      "supportEmbed": "SupportEmbed",
+      "supportReranker": "SupportReranker",
+      "supportTextToImage": "SupportTextToImage",
+      "supportImageToImage": "SupportImageToImage",
+      "supportTextToAudio": "SupportTextToAudio",
+      "supportAudioToAudio": "SupportAudioToAudio",
+      "supportTextToVideo": "SupportTextToVideo",
+      "supportImageToVideo": "SupportImageToVideo",
+      "multimodal": "multimodal",
+      "llmEndpoint": "LlmEndpoint",
+      "chatPath": "ChatPath",
+      "embedPath": "embedPath",
+      "llmModel": "LlmModel",
+      "llmApiKey": "apiKey",
+      "llmExtraConfig": "LlmExtraConfig",
+      "options": "Options",
+      "ability": "Ability"
+    }
+  ,
+  "llmModal": {
+    "TitleRequired": "Please enter the name",
+    "BrandRequired": "Please enter the brand",
+    "ModelRequired": "Please enter the model",
+    "ApiKeyRequired": "Please enter the apiKey",
+    "QuickAddLlm": "One-click addition of large models"
+  },
+  "placeholder": {
+    "title": "Please enter the title",
+    "brand": "Please enter the brand",
+    "llmModel": "Please enter the llmModel",
+    "description": "Please enter the description"
+  },
+  "actions": {
+    "verifyConfiguration": "Verify Configuration"
+  },
+  "message": {
+    "verifySuccess": "Verification successful"
+  },
+  "addProvider": "Provider list",
+  "modelType": "ModelType",
+  "llmModel": "ModelName",
+  "title": "name",
+  "groupName": "GroupName",
+  "provider": "供应商",
+  "ability": "ModelAbility",
+  "button": {
+    "management": "Management",
+    "test": "Test",
+    "addAllLlm": "Add models from the list",
+    "RetrieveAgain": "Retrieve the model list again"
+  },
+  "all": "All",
+  "verifyLlmTitle": "Verify Large Model",
+  "searchTextPlaceholder": "Search for model name or name",
+  "testSuccess": "TestSuccess",
+  "modelAbility": {
+    "supportThinking": "Thinking",
+    "supportTool": "Tool",
+    "SupportAudio": "Audio",
+    "SupportVideo": "Video",
+    "SupportImage": "Image",
+    "supportFree": "Free",
+    "supportImageB64Only": "ImageB64Only",
+    "supportToolMessage": "SupportToolMessage"
+  },
+  "requestPath": "RequestPath",
+  "modelToBeTested": "ModelToBeTested"
+}
